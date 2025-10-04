@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Harbor • YouTube</title>
+</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/static/favicon.ico" />
+    <!-- CSS: Tailwind compilé si présent, sinon fallback app.css -->
+    <link id="tw_css" rel="stylesheet" href="/static/build/app.css" onload="document.documentElement.classList.add('tw');" onerror="this.parentNode.removeChild(this)" />
+    <style>
+      :root{ --bg:#0b0e13; --bg2:#0a0c12; --card: rgba(255,255,255,0.05); --border: rgba(255,255,255,0.08); --text:#e8eaf0; --muted:#98a2b3; --acc1:#7c3aed; --acc2:#2563eb; --acc3:#06b6d4; }
+      html { scroll-behavior: smooth; }
+      body { background: radial-gradient(1200px 600px at -10% -10%, rgba(124,58,237,0.12), transparent 60%), radial-gradient(1000px 500px at 110% -20%, rgba(37,99,235,0.10), transparent 60%), linear-gradient(180deg, #0b1220, #0a0f1d); color: var(--text); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu; }
+      .wrap { max-width: 1060px; margin: 24px auto 60px; padding: 0 16px; }
+      .hero { background: linear-gradient(135deg, rgba(124,58,237,0.25), rgba(37,99,235,0.25)); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; margin-bottom: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.35); backdrop-filter: blur(8px); }
+      h1 { margin: 0; font-size: 22px; letter-spacing: .3px; }
+      p.lead { margin: 6px 0 0; color: var(--muted); }
+      .card{ background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin: 16px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.25); backdrop-filter: blur(8px); }
+      .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+      .mt-2 { margin-top: 12px; } .mt-3 { margin-top: 20px; }
+      h2 { margin: 0 0 10px; font-size: 16px; font-weight: 600; color: #dbe3ff; }
+      .preview { max-width: 360px; max-height: 220px; display: block; border-radius: 8px; border: 1px solid var(--border); }
+      .bar { width: 100%; max-width: 100px; height: 10px; background: rgba(255,255,255,0.06); border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+      .bar > .fill { height: 100%; background: linear-gradient(90deg, #22c55e, #16a34a); width: 0%; transition: width .35s; box-shadow: 0 0 10px rgba(34,197,94,0.3) inset; }
+      .hint { color: var(--muted); font-size: 12px; }
+      .wm-thumb { max-height: 40px; border: 1px solid var(--border); border-radius: 6px; background: rgba(255,255,255,0.04); }
+      .muted { color: var(--muted); }
+      .nav { position: sticky; top: 0; z-index: 10; background: rgba(10,12,18,0.65); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+      .nav-inner { max-width: 1060px; margin: 0 auto; padding: 10px 16px; display:flex; align-items:center; justify-content: space-between; }
+      .nav-brand { font-weight: 600; letter-spacing:.2px; }
+      .chip { display:inline-flex; align-items:center; gap:8px; background: rgba(255,255,255,0.06); border:1px solid var(--border); color:#dbe3ff; padding:6px 10px; border-radius:999px; font-size:12px; }
+      .chip-active{ background: linear-gradient(135deg, rgba(124,58,237,0.35), rgba(37,99,235,0.35)); border-color: rgba(124,58,237,0.45); color:#ffffff; }
+      .btn-chip{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:8px; border:1px solid var(--border); background: rgba(255,255,255,0.06); color:#e9edff; cursor:pointer; }
+      .btn-chip-violet{ border:0; background: linear-gradient(135deg, #7c3aed, #8b5cf6); color: white; box-shadow: 0 6px 18px rgba(124,58,237,0.25); }
+      .btn-chip-violet:hover{ filter: brightness(1.05); }
+      .btn-gradient{ padding:8px 14px; border-radius:10px; border:0; background:linear-gradient(135deg, #7c3aed, #2563eb); color:white; cursor:pointer; }
+      .secondary{ padding:6px 10px; border-radius:8px; background: rgba(255,255,255,0.06); color:#e9edff; border:1px solid var(--border); cursor:pointer; }
+      .badge{ display:inline-block; padding:3px 8px; border-radius:999px; font-size:11px; border:1px solid var(--border); }
+      .badge-blue{ background:rgba(37,99,235,0.18); color:#cfe2ff; }
+      .badge-violet{ background:rgba(124,58,237,0.18); color:#e0d4ff; }
+      .badge-muted{ background:rgba(148,163,184,0.18); color:#e2e8f0; }
+      .badge-live{ background:rgba(34,197,94,0.18); color:#d1fae5; }
+      .toast { position: fixed; top: 16px; right: 16px; z-index: 9999; background: linear-gradient(135deg, rgba(124,58,237,0.35), rgba(37,99,235,0.35)); color: #e9edff; border: 1px solid var(--border); padding: 10px 14px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.35); backdrop-filter: blur(8px); opacity: 0; transform: translateY(-8px); transition: opacity .25s ease, transform .25s ease; }
+      .toast.show { opacity: 1; transform: translateY(0); }
+      .toast a { color: #cfe2ff; text-decoration: none; }
+      .toast a:hover { text-decoration: underline; }
+      .toast .close { margin-left: 10px; cursor: pointer; opacity: .8; }
+      .toast .close:hover { opacity: 1; }
+      input[type="text"], input[type="number"], input[type="url"], input[type="search"], input[type="file"], input:not([type]), select, textarea {
+        -webkit-appearance: none; appearance: none;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 8px 12px;
+        border-radius: 10px;
+        outline: none;
+        max-width: 100%;
+      }
+      input::placeholder, textarea::placeholder { color: #94a3b8; }
+      input:focus, select:focus, textarea:focus {
+        border-color: rgba(139,92,246,0.6);
+        box-shadow: 0 0 0 2px rgba(139,92,246,0.30), 0 0 0 1px rgba(139,92,246,0.60) inset;
+      }
+      input[type="checkbox"]{ width:16px; height:16px; accent-color:#7c3aed; }
+      input[type="file"]{
+        color:#cfe2ff;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid var(--border);
+        padding: 6px 10px;
+        border-radius: 8px;
+      }
+      #ff_w, #ff_h { width: 120px; }
+      #ff_trim_start, #ff_trim_end { width: 150px; }
+      #pauseN_value { width: 80px; }
+      #q_url, #q_title, #q_desc, #q_proxy, #q_tags, #q_playlists, #inc_kw, #exc_kw, #ff_wm {
+        flex: 1 1 420px; min-width: 300px;
+      }
+      .row > * { margin: 4px; }
+      .subnav{ position: sticky; top: 52px; z-index: 9; background: rgba(10,12,18,0.55); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+      .subnav-inner{ max-width: 1060px; margin: 0 auto; padding: 8px 16px; display:flex; gap:8px; overflow:auto; }
+      .card{ transition: border-color .2s ease, box-shadow .2s ease, transform .06s ease; }
+      .card:hover{ border-color: rgba(124,58,237,0.35); box-shadow: 0 10px 28px rgba(124,58,237,0.12); }
+      .card h2{ position: relative; padding-left: 10px; }
+      .card h2:before{ content:""; position:absolute; left:0; top:3px; bottom:3px; width:4px; border-radius:4px; background: linear-gradient(180deg, #7c3aed, #2563eb); opacity:.8; }
+      #logs::-webkit-scrollbar, #activity_list::-webkit-scrollbar{ height:10px; width:10px; }
+      #logs::-webkit-scrollbar-thumb, #activity_list::-webkit-scrollbar-thumb{ background: linear-gradient(135deg, rgba(124,58,237,0.6), rgba(37,99,235,0.6)); border-radius: 999px; border: 2px solid rgba(11,14,19,0.6); }
+      #logs::-webkit-scrollbar-track, #activity_list::-webkit-scrollbar-track{ background: rgba(255,255,255,0.06); border-radius: 999px; }
+      #queue table { table-layout: fixed; width: 100%; }
+      #queue th, #queue td { vertical-align: top; }
+      #queue thead th:nth-child(1) { width: 18%; }
+      #queue thead th:nth-child(2) { width: 26%; }
+      #queue thead th:nth-child(3) { width: 10%; }
+      #queue thead th:nth-child(4),
+      #queue thead th:nth-child(5),
+      #queue thead th:nth-child(6) { width: 8%; }
+      #queue thead th:nth-child(7) { width: 10%; }
+      #queue thead th:nth-child(8) { width: 5%; }
+      #queue thead th:nth-child(9) { width: 5%; }
+      .wrap-cell { white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
+      .url-cell { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .nowrap-ellipsis { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      #queue td:last-child { white-space: nowrap; }
+      #queue .table-wrap { overflow-x: hidden; }
+    </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="flex items-center gap-3">
+        <span class="nav-brand text-lg">Harbor • T2Y</span>
+        <span class="badge badge-muted">Local</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="/" class="btn-chip">Accueil</a>
+        <a href="/youtube" class="btn-chip btn-chip-active">YouTube</a>
+        <a href="/tiktok" class="btn-chip">TikTok</a>
+      </div>
+      <div class="nav-actions">
+        <span id="css_badge" class="chip" title="Etat CSS">CSS: …</span>
+        <button class="btn-chip" onclick="checkFfmpeg()">FFmpeg</button>
+        <button class="btn-chip" onclick="downloadDiagnostics()">Diagnostics</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <div class="hero">
+      <h1 class="text-xl">YouTube uniquement</h1>
+      <p class="lead">Uploader local avec prétraitement ffmpeg et profils</p>
+    </div>
+
+    <nav class="subnav">
+      <div class="subnav-inner">
+        <a href="#settings" class="chip">Paramètres</a>
+        <a href="#profiles" class="chip">Profils</a>
+        <a href="#form" class="chip">Formulaire</a>
+        <a href="#advanced" class="chip">Options</a>
+        <a href="#queue" class="chip">File d’attente</a>
+        <a href="#journal" class="chip">Journal</a>
+        <a href="#activity" class="chip">Activité</a>
+      </div>
+    </nav>
+
+    <!-- Paramètres généraux -->
+    <section id="settings" class="card glass-card p-4">
+      <h2>Paramètres (généraux)</h2>
+      <div class="row">
+        <label>Privacy:</label>
+        <select id="s_privacy" class="px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60">
+          <option value="public">public</option>
+          <option value="unlisted">unlisted</option>
+          <option value="private" selected>private</option>
+        </select>
+        <input id="s_profile" placeholder="Profil OAuth (default)" class="px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" />
+        <input id="s_timeout" type="number" placeholder="Timeout (s)" class="px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" />
+        <input id="s_proxy" class="w-full px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" placeholder="Proxy (ex: http://user:pass@host:port)" />
+      </div>
+      <div class="row">
+        <input id="s_chunk" type="number" placeholder="Chunk MB" class="px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" />
+        <input id="s_retries" type="number" placeholder="Retries" class="px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" />
+        <button class="btn-gradient" onclick="saveSettings()">Enregistrer</button>
+        <button class="btn-gradient" onclick="checkFfmpeg()">FFmpeg</button>
+        <button class="btn-chip" onclick="downloadDiagnostics()">Exporter diagnostics</button>
+        <button class="btn-chip" onclick="disconnectProfile()">Déconnecter</button>
+        <button class="btn-chip" onclick="reauthProfile()">Re-auth</button>
+      </div>
+    </section>
+
+    <!-- Profils -->
+    <section id="profiles" class="card glass-card p-4">
+      <h2 class="mt-3">Profils</h2>
+      <div class="row">
+        <select id="prof_select" class="px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60"></select>
+        <button class="btn-chip" onclick="profileLoad()">Charger</button>
+        <button class="btn-chip" onclick="profileSave()">Enregistrer</button>
+        <button class="btn-chip" onclick="profileDuplicate()">Dupliquer</button>
+        <button class="btn-chip" onclick="profileDelete()">Supprimer</button>
+        <button class="btn-chip" onclick="profilesExport()">Exporter</button>
+        <button class="btn-chip" onclick="profilesImport()">Importer</button>
+      </div>
+    </section>
+
+    <!-- Formulaire principal -->
+    <section id="form" class="card glass-card p-4">
+      <h2 class="mt-3">Formulaire vidéo</h2>
+      <div class="row mt-2">
+        <input id="q_url" class="w-full px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" placeholder="URL TikTok" />
+        <button class="btn-chip" onclick="prefill()">Préremplir</button>
+      </div>
+      <div class="row">
+        <input id="q_title" class="w-full px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" placeholder="Titre YouTube" />
+      </div>
+      <div class="row">
+        <input id="q_desc" class="w-full px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" placeholder="Description" />
+      </div>
+      <div class="row">
+        <img id="thumb" class="preview" alt="Miniature" />
+      </div>
+    </section>
+
+    <!-- Options avancées (YouTube uniquement) -->
+    <section id="advanced" class="card glass-card p-4">
+      <h2 class="mt-3">Options avancées</h2>
+      <div class="row">
+        <input id="q_tags" class="w-full px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" placeholder="Tags (virgules)" />
+      </div>
+      <div class="row">
+        <label>Privacy:</label>
+        <select id="q_privacy" class="px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60">
+          <option value="public">public</option>
+          <option value="unlisted">unlisted</option>
+          <option value="private" selected>private</option>
+        </select>
+        <select id="q_category" class="px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60">
+          {% for name, cid in categories %}
+            <option value="{{ cid }}">{{ name }}</option>
+          {% endfor %}
+        </select>
+        <select id="q_language" class="px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60">
+          {% for name, code in languages %}
+            <option value="{{ code }}">{{ name }}</option>
+          {% endfor %}
+        </select>
+        <select id="q_license" class="px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60">
+          {% for name, code in licenses %}
+            <option value="{{ code }}">{{ name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="row">
+        <input id="q_playlists" class="w-full px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" placeholder="Playlists (IDs, virgules)" />
+      </div>
+      <div class="row">
+        <input id="q_proxy" class="w-full px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" placeholder="Proxy (ex: http://user:pass@host:port)" />
+      </div>
+      <div class="row">
+        <input id="q_timeout" type="number" placeholder="Timeout upload (s)" class="px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" />
+        <input id="q_chunk" type="number" placeholder="Chunk MB" class="px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" />
+        <input id="q_retries" type="number" placeholder="Retries" class="px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" />
+        <input id="q_profile" placeholder="Profil OAuth (optionnel)" class="px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" />
+      </div>
+      <!-- ffmpeg (léger) -->
+      <div class="row">
+        <label>ffmpeg:</label>
+        <select id="ff_mode" class="px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60">
+          <option value="none">none</option>
+          <option value="crop_9_16">crop_9_16</option>
+          <option value="pad_9_16">pad_9_16</option>
+        </select>
+        <input id="ff_w" type="number" placeholder="W (ex 1080)" class="w-[120px] px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" oninput="whChanged('w')" onblur="validateWH()" />
+        <input id="ff_h" type="number" placeholder="H (ex 1920)" class="w-[120px] px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" oninput="whChanged('h')" onblur="validateWH()" />
+        <label class="flex items-center gap-1 m-1"><input type="checkbox" id="ff_normalize" class="accent-violet-500"/> <span>normalize</span></label>
+        <label class="flex items-center gap-1 m-1"><input type="checkbox" id="ff_remux" class="accent-violet-500"/> <span>remux</span></label>
+        <label class="flex items-center gap-1 m-1"><input type="checkbox" id="ff_force_916" class="accent-violet-500" onchange="validateWH()"/> <span>forcer 9:16</span></label>
+        <input id="ff_trim_start" type="number" placeholder="trim start (s)" class="w-[150px] px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" />
+        <input id="ff_trim_end" type="number" placeholder="trim end (s)" class="w-[150px] px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" />
+        <button class="btn-chip" type="button" onclick="setWHShorts()">Auto 1080×1920</button>
+      </div>
+      <div class="row">
+        <input id="ff_wm" class="w-full px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" placeholder="Watermark image path (PNG/JPG)" />
+        <input id="ff_wm_file" type="file" accept="image/png,image/jpeg" class="m-1 block text-sm text-slate-300 file:mr-4 file:rounded-lg file:border-0 file:bg-violet-600 file:px-3 file:py-2 file:text-white hover:file:bg-violet-500" />
+        <button class="btn-chip" onclick="uploadWatermark()">Upload</button>
+        <img id="ff_wm_preview" class="wm-thumb" alt="preview" />
+        <select id="ff_wm_pos" class="px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60">
+          <option value="top-left">top-left</option>
+          <option value="top-right">top-right</option>
+          <option value="bottom-left">bottom-left</option>
+          <option value="bottom-right">bottom-right</option>
+        </select>
+      </div>
+      <div class="row"><span id="wh_hint" class="hint"></span></div>
+      <div class="row">
+        <button class="btn-gradient" onclick="addToQueue()">Ajouter à la file</button>
+      </div>
+    </section>
+
+    <!-- File d’attente -->
+    <section id="queue" class="card glass-card p-4">
+      <h2 class="mt-3">File d’attente</h2>
+      <div class="row">
+        <button class="btn-chip btn-chip-violet" onclick="startQueue()">Démarrer</button>
+        <button class="btn-chip" onclick="pauseQueue(false)">Reprendre</button>
+        <button class="btn-chip" onclick="pauseQueue(true)">Pause</button>
+        <span class="ml-4"></span>
+        <label class="flex items-center gap-1 m-1"><input type="checkbox" id="pauseN_enabled" class="accent-violet-500"> <span>Pause après</span></label>
+        <input id="pauseN_value" type="number" step="1" class="w-20 px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-400/60" placeholder="N"/>
+        <button class="btn-chip" onclick="applyPauseN()">Appliquer</button>
+        <span class="flex-1"></span>
+        <button class="btn-chip" onclick="clearDone()">Vider terminés</button>
+        <button class="btn-chip" onclick="resumeErrors()">Reprendre erreurs</button>
+      </div>
+      <div class="mt-2 table-wrap rounded-xl border border-white/10">
+        <table class="min-w-full text-sm">
+          <thead class="bg-white/5">
+            <tr>
+              <th class="text-left px-3 py-2 font-semibold text-indigo-200">URL</th>
+              <th class="text-left px-3 py-2 font-semibold text-indigo-200">Titre</th>
+              <th class="text-left px-3 py-2 font-semibold text-indigo-200">Statut</th>
+              <th class="text-left px-3 py-2 font-semibold text-indigo-200">F%</th>
+              <th class="text-left px-3 py-2 font-semibold text-indigo-200">D%</th>
+              <th class="text-left px-3 py-2 font-semibold text-indigo-200">U%</th>
+              <th class="text-left px-3 py-2 font-semibold text-indigo-200">Résultat</th>
+              <th class="text-left px-3 py-2 font-semibold text-indigo-200">Ordre</th>
+              <th class="px-3 py-2"></th>
+            </tr>
+          </thead>
+          <tbody id="queue_body" class="divide-y divide-white/10">
+            {% for it in q %}
+            <tr class="hover:bg-white/5">
+              <td class="px-3 py-2 url-cell" title="{{ it.url }}">{{ it.url }}</td>
+              <td class="px-3 py-2 wrap-cell">{{ it.title }}</td>
+              <td class="px-3 py-2">
+                {% set st = (it.status or '')|lower %}
+                {% if 'run' in st or 'process' in st or 'upload' in st or 'download' in st %}
+                  <span class="badge badge-live">{{ it.status }}</span>
+                {% elif 'done' in st or 'ok' in st or 'success' in st %}
+                  <span class="badge badge-blue">{{ it.status }}</span>
+                {% elif 'error' in st or 'fail' in st %}
+                  <span class="badge badge-muted">{{ it.status }}</span>
+                {% else %}
+                  <span class="badge badge-violet">{{ it.status }}</span>
+                {% endif %}
+                {% if it.badges %}
+                  {% for b in it.badges %}
+                    {% if b == 'prep' %}
+                      <span class="badge badge-blue" title="Préparation MP4 appliquée">prep</span>
+                    {% elif b == 'ffskip' %}
+                      <span class="badge badge-muted" title="ffmpeg sauté (entrée invalide ou trop petite)">ff-skip</span>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+              </td>
+              <td class="px-3 py-2"><div class="bar"><div class="fill" data-f="{{ it.f_pct or 0 }}"></div></div></td>
+              <td class="px-3 py-2"><div class="bar"><div class="fill" data-d="{{ it.d_pct or 0 }}"></div></div></td>
+              <td class="px-3 py-2"><div class="bar"><div class="fill" data-u="{{ it.u_pct or 0 }}"></div></div></td>
+              <td class="px-3 py-2 nowrap-ellipsis" title="{{ it.result }}">
+                {% set rs = it.results or {} %}
+                {% if rs.yt %}<span class="badge badge-blue" title="YouTube">yt</span> {{ rs.yt }} {% endif %}
+                {% if not rs or not rs.yt %}{{ it.result }}{% endif %}
+              </td>
+              <td class="px-3 py-2">
+                <button class="btn-chip" onclick="moveItem('{{ it.iid }}','up')">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" /></svg>
+                </button>
+                <button class="btn-chip" onclick="moveItem('{{ it.iid }}','down')">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                </button>
+              </td>
+              <td class="px-3 py-2"><button class="btn-chip" onclick="removeItem('{{ it.iid }}')" aria-label="Supprimer" title="Supprimer">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M6 7h12v2H6zM9 9h2v8H9zm4 0h2v8h-2z"/></svg>
+              </button></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Journal & Actions -->
+    <section id="journal" class="card glass-card p-4">
+      <h2 class="mt-3">Actions & Journal</h2>
+      <div class="row">
+        <button class="btn-gradient" onclick="testYoutubeConn()">Tester connexion YouTube</button>
+        <span id="net_status" class="ml-1.5"></span>
+        <span class="flex-1"></span>
+        <span>Dernier ID vidéo: <span id="last_id">—</span>
+          <a id="open_last" target="_blank" class="ml-1.5 btn-chip inline-flex">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-1"><path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3z"/><path d="M5 5h7v2H7v10h10v-5h2v7H5z"/></svg>
+            Ouvrir
+          </a>
+          <button class="secondary" onclick="copyLastId()">Copier ID</button>
+        </span>
+      </div>
+      <pre id="logs" class="bg-white/5 border border-white/10 p-2.5 max-h-72 overflow-auto rounded-xl"></pre>
+    </section>
+
+    <!-- Activité récente -->
+    <section id="activity" class="card">
+      <h2 class="mt-3">Activité récente</h2>
+      <ul id="activity_list" class="space-y-2" style="max-height:280px; overflow:auto; padding-right:4px;"></ul>
+    </section>
+  </div>
+
+  <script src="/static/app.js"></script>
+  <script>
+    // (copier ici les scripts JS nécessaires depuis index.html, en supprimant toute logique TikTok/Instagram)
+    // Pour la démo, le script sera chargé via /static/app.js si présent
+  </script>
+</body>
+</html>

@@ -8,3 +8,7 @@ __pycache__/
 # Ignore les fichiers secrets
 client_secret.json
 token.pickle
+Build / caches
+*.log
+*.tmp
+*.cache/

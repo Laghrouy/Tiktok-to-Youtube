@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Harbor • TikTok</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="/static/favicon.ico" />
+  <link id="tw_css" rel="stylesheet" href="/static/build/app.css" onload="document.documentElement.classList.add('tw');" onerror="this.parentNode.removeChild(this)" />
+  <style>
+    :root{ --bg:#0b0e13; --bg2:#0a0c12; --card: rgba(255,255,255,0.05); --border: rgba(255,255,255,0.08); --text:#e8eaf0; --muted:#98a2b3; --acc1:#7c3aed; --acc2:#2563eb; --acc3:#06b6d4; }
+    html { scroll-behavior: smooth; }
+    body { background: radial-gradient(1200px 600px at -10% -10%, rgba(124,58,237,0.12), transparent 60%), radial-gradient(1000px 500px at 110% -20%, rgba(37,99,235,0.10), transparent 60%), linear-gradient(180deg, #0b1220, #0a0f1d); color: var(--text); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu; }
+    .wrap { max-width: 1060px; margin: 24px auto 60px; padding: 0 16px; }
+    .hero { background: linear-gradient(135deg, rgba(37,99,235,0.25), rgba(255,59,92,0.18)); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; margin-bottom: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.35); backdrop-filter: blur(8px); }
+    h1 { margin: 0; font-size: 22px; letter-spacing: .3px; }
+    p.lead { margin: 6px 0 0; color: var(--muted); }
+    .card{ background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin: 16px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.25); backdrop-filter: blur(8px); }
+    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .mt-2 { margin-top: 12px; } .mt-3 { margin-top: 20px; }
+    h2 { margin: 0 0 10px; font-size: 16px; font-weight: 600; color: #dbe3ff; }
+    .preview { max-width: 360px; max-height: 220px; display: block; border-radius: 8px; border: 1px solid var(--border); }
+    .bar { width: 100%; max-width: 100px; height: 10px; background: rgba(255,255,255,0.06); border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+    .bar > .fill { height: 100%; background: linear-gradient(90deg, #ff3b5c, #2563eb); width: 0%; transition: width .35s; box-shadow: 0 0 10px rgba(255,59,92,0.3) inset; }
+    .hint { color: var(--muted); font-size: 12px; }
+    .wm-thumb { max-height: 40px; border: 1px solid var(--border); border-radius: 6px; background: rgba(255,255,255,0.04); }
+    .muted { color: var(--muted); }
+    .nav { position: sticky; top: 0; z-index: 10; background: rgba(10,12,18,0.65); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+    .nav-inner { max-width: 1060px; margin: 0 auto; padding: 10px 16px; display:flex; align-items:center; justify-content: space-between; }
+    .nav-brand { font-weight: 600; letter-spacing:.2px; }
+    .chip { display:inline-flex; align-items:center; gap:8px; background: rgba(255,255,255,0.06); border:1px solid var(--border); color:#dbe3ff; padding:6px 10px; border-radius:999px; font-size:12px; }
+    .chip-active{ background: linear-gradient(135deg, rgba(255,59,92,0.35), rgba(37,99,235,0.35)); border-color: rgba(255,59,92,0.45); color:#ffffff; }
+    .btn-chip{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:8px; border:1px solid var(--border); background: rgba(255,255,255,0.06); color:#e9edff; cursor:pointer; }
+    .btn-chip-tt{ border:0; background: linear-gradient(135deg, #ff3b5c, #2563eb); color: white; box-shadow: 0 6px 18px rgba(255,59,92,0.18); }
+    .btn-chip-tt:hover{ filter: brightness(1.05); }
+    .btn-gradient{ padding:8px 14px; border-radius:10px; border:0; background:linear-gradient(135deg, #ff3b5c, #2563eb); color:white; cursor:pointer; }
+    .secondary{ padding:6px 10px; border-radius:8px; background: rgba(255,255,255,0.06); color:#e9edff; border:1px solid var(--border); cursor:pointer; }
+    .badge{ display:inline-block; padding:3px 8px; border-radius:999px; font-size:11px; border:1px solid var(--border); }
+    .badge-blue{ background:rgba(37,99,235,0.18); color:#cfe2ff; }
+    .badge-tt{ background:rgba(255,59,92,0.18); color:#ffe2e7; }
+    .badge-muted{ background:rgba(148,163,184,0.18); color:#e2e8f0; }
+    .badge-live{ background:rgba(255,59,92,0.18); color:#ffe2e7; }
+    .toast { position: fixed; top: 16px; right: 16px; z-index: 9999; background: linear-gradient(135deg, rgba(255,59,92,0.35), rgba(37,99,235,0.35)); color: #e9edff; border: 1px solid var(--border); padding: 10px 14px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.35); backdrop-filter: blur(8px); opacity: 0; transform: translateY(-8px); transition: opacity .25s ease, transform .25s ease; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast a { color: #cfe2ff; text-decoration: none; }
+    .toast a:hover { text-decoration: underline; }
+    .toast .close { margin-left: 10px; cursor: pointer; opacity: .8; }
+    .toast .close:hover { opacity: 1; }
+    input[type="text"], input[type="number"], input[type="url"], input[type="search"], input[type="file"], input:not([type]), select, textarea {
+      -webkit-appearance: none; appearance: none;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 10px;
+      outline: none;
+      max-width: 100%;
+    }
+    input::placeholder, textarea::placeholder { color: #94a3b8; }
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(255,59,92,0.6);
+      box-shadow: 0 0 0 2px rgba(255,59,92,0.30), 0 0 0 1px rgba(255,59,92,0.60) inset;
+    }
+    input[type="checkbox"]{ width:16px; height:16px; accent-color:#ff3b5c; }
+    input[type="file"]{
+      color:#ffe2e7;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+    .row > * { margin: 4px; }
+    .subnav{ position: sticky; top: 52px; z-index: 9; background: rgba(10,12,18,0.55); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+    .subnav-inner{ max-width: 1060px; margin: 0 auto; padding: 8px 16px; display:flex; gap:8px; overflow:auto; }
+    .card{ transition: border-color .2s ease, box-shadow .2s ease, transform .06s ease; }
+    .card:hover{ border-color: rgba(255,59,92,0.35); box-shadow: 0 10px 28px rgba(255,59,92,0.12); }
+    .card h2{ position: relative; padding-left: 10px; }
+    .card h2:before{ content:""; position:absolute; left:0; top:3px; bottom:3px; width:4px; border-radius:4px; background: linear-gradient(180deg, #ff3b5c, #2563eb); opacity:.8; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="flex items-center gap-3">
+        <span class="nav-brand text-lg">Harbor • T2Y</span>
+        <span class="badge badge-muted">Local</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="/" class="btn-chip">Accueil</a>
+        <a href="/youtube" class="btn-chip">YouTube</a>
+        <a href="/tiktok" class="btn-chip btn-chip-tt chip-active">TikTok</a>
+      </div>
+      <div class="nav-actions">
+        <span id="css_badge" class="chip" title="Etat CSS">CSS: …</span>
+        <button class="btn-chip" onclick="checkFfmpeg()">FFmpeg</button>
+        <button class="btn-chip" onclick="downloadDiagnostics()">Diagnostics</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <div class="hero">
+      <h1 class="text-xl">TikTok</h1>
+      <p class="lead">Uploader local sur TikTok avec OAuth v2</p>
+    </div>
+
+    <!-- Statut connexion TikTok -->
+    <section class="card glass-card p-4">
+      <div class="row">
+        <span id="tt_status" class="badge badge-muted">Statut : ...</span>
+        <button class="btn-gradient" onclick="ttConnect()">Connecter TikTok</button>
+        <button class="btn-chip" onclick="ttDisconnect()">Déconnecter</button>
+      </div>
+    </section>
+
+    <!-- Formulaire TikTok -->
+    <section class="card glass-card p-4">
+      <h2 class="mt-3">Upload TikTok</h2>
+      <div class="row mt-2">
+        <input id="tt_file" type="file" accept="video/mp4" class="w-full px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200" onchange="previewVideo(event)" />
+      </div>
+      <div class="row">
+        <input id="tt_caption" class="w-full px-3 py-2 m-1 rounded-lg border border-white/10 bg-white/5 text-slate-200 placeholder-slate-400" placeholder="Légende TikTok" />
+      </div>
+      <div class="row">
+        <video id="tt_preview" class="preview" controls style="display:none;"></video>
+      </div>
+      <div class="row">
+        <button class="btn-gradient" onclick="ttUpload()">Uploader sur TikTok</button>
+      </div>
+    </section>
+
+    <!-- Journal TikTok -->
+    <section class="card glass-card p-4">
+      <h2 class="mt-3">Journal</h2>
+      <div class="row">
+        <span>Dernier ID TikTok: <span id="last_id">—</span></span>
+        <button class="secondary" onclick="copyLastId()">Copier ID</button>
+      </div>
+      <pre id="logs" class="bg-white/5 border border-white/10 p-2.5 max-h-72 overflow-auto rounded-xl"></pre>
+    </section>
+  </div>
+
+  <script>
+    function previewVideo(e) {
+      const file = e.target.files[0];
+      const video = document.getElementById('tt_preview');
+      if (file) {
+        video.src = URL.createObjectURL(file);
+        video.style.display = 'block';
+      } else {
+        video.src = '';
+        video.style.display = 'none';
+      }
+    }
+    async function ttConnect() {
+      const r = await fetch('/api/tiktok/connect', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({profile:'default'})});
+      const j = await r.json();
+      if(j && j.authUrl){ window.open(j.authUrl, '_blank'); }
+      setTimeout(loadTtStatus, 500);
+    }
+    async function ttDisconnect() {
+      await fetch('/api/tiktok/disconnect', {method:'POST'});
+      loadTtStatus();
+    }
+    async function loadTtStatus(){
+      try{
+        const r = await fetch('/api/tiktok/status');
+        if(!r.ok) return;
+        const j = await r.json();
+        const el = document.getElementById('tt_status');
+        if(!el) return;
+        el.className = 'badge ' + (j.connected? 'badge-tt':'badge-muted');
+        el.textContent = j.connected? (j.profile? ('connecté • '+j.profile) : 'connecté') : 'non connecté';
+      }catch(e){}
+    }
+    loadTtStatus();
+    async function ttUpload() {
+      // TODO: appeler l'API upload TikTok (à implémenter côté backend)
+      alert('Upload TikTok à implémenter');
+    }
+    async function copyLastId(){
+      const t = document.getElementById('last_id').textContent||'';
+      if(!t || t==='—') return;
+      try{ await navigator.clipboard.writeText(t);}catch(e){}
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+# Dépendances spécifiques au webapp (FastAPI, TikTok upload, etc.)
+fastapi
+uvicorn
+requests
