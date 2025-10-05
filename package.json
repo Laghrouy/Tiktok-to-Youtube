@@ -1,0 +1,14 @@
+{
+  "name": "tiktok-to-youtube-web",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "tailwind:build": "tailwindcss -c tailwind.config.js -i ./webapp/static/styles/tailwind.css -o ./webapp/static/build/app.css --minify",
+    "tailwind:watch": "tailwindcss -c tailwind.config.js -i ./webapp/static/styles/tailwind.css -o ./webapp/static/build/app.css --watch"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.10"
+  }
+}

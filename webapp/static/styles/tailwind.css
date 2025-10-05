@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Theme helpers (optionnel) */
+@layer utilities {
+  .glass-card {
+    @apply bg-panel/80 border border-white/5 rounded-xl2 shadow-glass backdrop-blur;
+  }
+  .btn-gradient {
+    @apply text-white font-semibold rounded-full border border-white/10 shadow-lg;
+    background-image: linear-gradient(135deg, theme('colors.accent2'), theme('colors.accent1'));
+  }
+  .btn-chip {
+    @apply inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-medium text-white/90 bg-white/10 border border-white/10 hover:bg-white/15 hover:ring-2 hover:ring-accent1/40 hover:shadow-lg transition;
+  }
+  .chip-active { @apply bg-accent2/30 text-white ring-2 ring-accent2/40; }
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold;
+  }
+  .badge-live { @apply bg-rose-600/90 text-white shadow; }
+  .badge-muted { @apply bg-white/10 text-slate-300; }
+  .badge-blue { @apply bg-accent2/90 text-white; }
+  .badge-violet { @apply bg-accent1/90 text-white; }
+  .chip { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs bg-white/10 text-slate-200 border border-white/10; }
+  .card-gradient { @apply rounded-xl2 border border-white/10 shadow-glass; background-image: linear-gradient(135deg, theme('colors.accent2')/20%, theme('colors.accent1')/20%); }
+  .nav {
+    @apply sticky top-0 z-40 w-full bg-panel/80 backdrop-blur border-b border-white/5;
+  }
+  .nav-inner { @apply max-w-6xl mx-auto px-4 py-3 flex items-center justify-between; }
+  .nav-brand { @apply text-indigo-100 font-semibold; }
+  .nav-actions { @apply flex items-center gap-2; }
+}
+
+/* Migration progressive: quand le CSS Tailwind est chargé (classe root .tw),
+   appliquer des utilitaires sur les sélecteurs existants pour un look Tailwind
+   sans réécrire tout le HTML. */
+@layer base {
+  .tw .row { @apply flex flex-wrap items-center gap-2 sm:gap-3; }
+  .tw .card { @apply glass-card p-4; }
+  .tw .hero { @apply glass-card p-4 sm:p-5; }
+  .tw h2 { @apply text-base sm:text-lg font-semibold text-indigo-100 mb-2; }
+  .tw .preview { @apply max-w-sm max-h-56 rounded-lg border border-borderGlass; }
+  .tw .wm-thumb { @apply max-h-10 border border-borderGlass rounded bg-white/5; }
+  .tw .hint, .tw .muted { @apply text-slate-400 text-xs; }
+
+  .tw input, .tw select { @apply px-3 py-2 rounded-lg border border-borderGlass bg-white/5 text-white placeholder-slate-400 outline-none; }
+  .tw input:focus, .tw select:focus { @apply ring-2 ring-accent1/30 border-accent1/60 bg-white/10; }
+  .tw button { @apply px-4 py-2 rounded-full font-semibold text-white border border-white/10 shadow; }
+  .tw button.secondary { @apply bg-transparent text-slate-200 border border-borderGlass shadow-none; }
+  .tw .btn-gradient { @apply shadow-lg; }
+
+  .tw table { @apply w-full border-collapse rounded-lg overflow-hidden; }
+  .tw thead th { @apply bg-white/5 text-indigo-100 text-left px-3 py-2 font-semibold; }
+  .tw tbody td { @apply px-3 py-2 border-t border-borderGlass; }
+  .tw tbody tr:hover { @apply bg-white/5; }
+
+  .tw .bar { @apply w-28 h-2 bg-white/10 rounded border border-borderGlass overflow-hidden; }
+  .tw .bar .fill { @apply h-full; background-image: linear-gradient(90deg, #22c55e, #16a34a); }
+
+  .tw #logs { @apply bg-white/5 border border-borderGlass p-3 rounded-lg; }
+}

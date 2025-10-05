@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=TikTok → YouTube (Local)
+Comment=Uploader TikTok vers YouTube (app locale)
+Exec=/home/laghrouy/skruby/tiktok-to-youtube/launch_web.sh
+Path=/home/laghrouy/skruby/tiktok-to-youtube
+Icon=
+Terminal=false
+Categories=AudioVideo;Network;
