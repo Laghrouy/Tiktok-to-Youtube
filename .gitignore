@@ -12,3 +12,5 @@ Build / caches
 *.log
 *.tmp
 *.cache/
+.env
+.venv-desktop/
