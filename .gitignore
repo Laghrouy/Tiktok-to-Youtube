@@ -14,3 +14,4 @@ Build / caches
 *.cache/
 .env
 .venv-desktop/
+PROJET_DESKTOP_RESUME.md
