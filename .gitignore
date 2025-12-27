@@ -13,3 +13,4 @@ Build / caches
 *.tmp
 *.cache/
 .venv-desktop/
+PROJET_DESKTOP_RESUME.md
